@@ -9,15 +9,20 @@
 </h:head>
 
 <h:body>
-
-    <h1>Aplicação Professor Curador</h1>
-
-    <h:outputText value="#{chatBean.mensagem}"/>
+    <div class="p-card p-mx-auto p-p-4 p-mt-6" style="max-width:500px;">
+        <h1 class="p-text-center p-mb-4">Olá, Professor Curador!</h1>
+    </div>
 
     <h:form id="single" enctype="multipart/form-data">
         <p:fileUpload id="upload" value="#{chatBean.file}" mode="simple" skinSimple="true"/>
 
         <p:commandButton id="submit" value="Submit" ajax="false" action="#{chatBean.upload}" styleClass="mt-3 ui-button-outlined block"/>
+
+        <br/><br/>
+
+        <h:panelGroup id="mensagem">
+            <h:outputText value="#{chatBean.mensagem}"/>
+        </h:panelGroup>
     </h:form>
 
 </h:body>

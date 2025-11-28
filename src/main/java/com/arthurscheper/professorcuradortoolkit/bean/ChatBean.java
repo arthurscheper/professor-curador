@@ -23,15 +23,12 @@ public class ChatBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        try {
-            mensagem = geminiService.enviarMensagem("Olá, Gemini!");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void upload() {
         if (file != null) {
+            mensagem = geminiService.enviarArquivo(file);
         }
     }
 

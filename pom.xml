@@ -55,6 +55,12 @@
             <classifier>jakarta</classifier>
         </dependency>
 
+        <dependency>
+            <groupId>org.primefaces.themes</groupId>
+            <artifactId>afterdark</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+
         <!-- Dependências de teste -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

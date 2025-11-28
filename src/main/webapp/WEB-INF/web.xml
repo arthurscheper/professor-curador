@@ -19,4 +19,9 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>afterdark</param-value>
+    </context-param>
+
 </web-app>
