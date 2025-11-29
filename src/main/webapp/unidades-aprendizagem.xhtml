@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="primefaces">
+<h:panelGroup rendered="#{chatBean.renderizarUnidadesAprendizagens}">
+    <div class="mensagem-inicial">
+        <p>
+            Ótimo! Trabalharemos com o bloco <span class="texto-destaque">#{chatBean.blocoDTO.tituloBloco}</span>.
+        </p>
+
+        <p>
+            Para iniciarmos o desenvolvimento da trilha de aprendizagem, por favor selecione uma das unidades de aprendizagens abaixo:
+        </p>
+    </div>
+
+    <div class="blocos">
+        <ui:repeat value="#{chatBean.blocoDTO.unidadesAprendizagem}" var="unidadeAprendizagem">
+            <div class="bloco">
+                <div class="titulo-bloco">
+                    <h:outputText value="#{unidadeAprendizagem.tituloUnidadeAprendizagem}"/>
+                </div>
+
+                <p:commandButton value="Selecionar" action="#{chatBean.selecionarUnidadeAprendizagem(unidadeAprendizagem)}" update="@form" process="@this" />
+            </div>
+        </ui:repeat>
+    </div>
+</h:panelGroup>
+</html>

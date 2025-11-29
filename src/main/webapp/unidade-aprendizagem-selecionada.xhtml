@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="primefaces">
+<h:panelGroup rendered="#{chatBean.renderizarUnidadeAprendizagemSelecionada}">
+    <div class="mensagem-inicial">
+        <p>
+            Muito bem, vamos iniciar a trilha de aprendizagem da unidade de aprendizagem <span class="texto-destaque">#{chatBean.unidadeAprendizagemDTO.tituloUnidadeAprendizagem}</span>.
+        </p>
+
+        <p>
+            Descreva abaixo como você gostaria de abordar a unidade de aprendizagem selecionada.
+        </p>
+    </div>
+
+    <p:inputTextarea rows="3" styleClass="mensagem-professor" placeholder="Digite aqui" />
+
+    <div class="botao-enviar">
+        <p:commandButton value="Enviar"/>
+    </div>
+</h:panelGroup>
+</html>

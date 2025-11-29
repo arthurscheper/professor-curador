@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="primefaces">
+<h:panelGroup rendered="#{chatBean.renderizarBlocos}">
+    <div class="mensagem-inicial">
+        <p>
+            Excelente! Analisei o plano de ensino da unidade curricular <span class="texto-destaque">#{chatBean.cursoDTO.metadadosCurso.nomeDisciplina}</span> e separei ela em blocos e unidades de aprendizagem.
+        </p>
+
+        <p>
+            Para iniciarmos o desenvolvimento da trilha de aprendizagem, por favor selecione um dos blocos abaixo:
+        </p>
+    </div>
+
+    <div class="blocos">
+        <ui:repeat value="#{chatBean.cursoDTO.estrutura}" var="bloco">
+            <div class="bloco">
+                <div class="titulo-bloco">
+                    <h:outputText value="#{bloco.tituloBloco}"/>
+                </div>
+
+                <ui:repeat value="#{bloco.unidadesAprendizagem}" var="unidadeAprendizagem">
+                    <p>
+                        <h:outputText value="#{unidadeAprendizagem.tituloUnidadeAprendizagem}" />
+                    </p>
+                </ui:repeat>
+
+                <p:commandButton value="Selecionar" action="#{chatBean.selecionarBloco(bloco)}" update="@form" process="@this"  />
+            </div>
+        </ui:repeat>
+    </div>
+</h:panelGroup>
+</html>

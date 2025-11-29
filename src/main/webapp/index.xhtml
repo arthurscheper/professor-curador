@@ -38,6 +38,51 @@
             line-height: 1.2;
             text-align: center;
         }
+
+        .blocos {
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .bloco {
+            background-color: #383b42;
+            height: 300px;
+            width: 300px;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .titulo-bloco {
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .texto-destaque {
+            font-weight: bold;
+            color: #42A5F5;
+        }
+
+        .mensagem-professor {
+            width: 100%;
+            background-color: #202124 !important;
+            color: #E8EAED !important;
+            border: 1px solid #3C4043;
+            border-radius: 508px;
+            padding: 16px 20px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+            transition: all 0.2s ease;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .botao-enviar {
+            width: 100%;
+            margin-top: 20px;
+            text-align: right;
+        }
     </h:outputStylesheet>
 </h:head>
 
@@ -75,46 +120,10 @@
 
             <p:growl id="growl" showDetail="true" keepAlive="true"/>
 
-            <h:panelGroup rendered="#{chatBean.cursoDTO != null}">
-                <p>
-                    <h:outputText value="#{chatBean.cursoDTO.metadadosCurso.nomeDisciplina}"/>
-                </p>
-
-                <p>
-                    <h:outputText value="#{chatBean.cursoDTO.metadadosCurso.cursoSugerido}"/>
-                </p>
-
-                <p>
-                    <h:outputText value="#{chatBean.cursoDTO.metadadosCurso.cargaHoraria}"/>
-                </p>
-
-                <ui:repeat value="#{chatBean.cursoDTO.estrutura}" var="bloco">
-                    <p>
-                        <h:outputText value="#{bloco.tituloBloco}"/>
-                    </p>
-
-                    <ui:repeat value="#{bloco.unidadesAprendizagem}" var="ua">
-                        <p>
-                            <h:outputText value="#{ua.tituloUnidadeAprendizagem}"/>
-                        </p>
-                    </ui:repeat>
-                </ui:repeat>
-            </h:panelGroup>
+            <ui:include src="blocos.xhtml" />
+            <ui:include src="unidades-aprendizagem.xhtml" />
+            <ui:include src="unidade-aprendizagem-selecionada.xhtml" />
         </div>
     </h:form>
-
-
-
-
-        <br/><br/>
-
-        <h:panelGroup id="mensagem">
-            <h:panelGroup rendered="#{chatBean.cursoDTO != null}">
-                <h:outputText value="#{chatBean.cursoDTO.metadadosCurso.nomeDisciplina}"/>
-                <br/>
-                <h:outputText value="#{chatBean.cursoDTO.metadadosCurso.cursoSugerido}" />
-            </h:panelGroup>
-        </h:panelGroup>
-
 </h:body>
 </html>
