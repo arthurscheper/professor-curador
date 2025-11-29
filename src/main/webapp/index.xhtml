@@ -1,29 +1,120 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="primefaces">
 
 <h:head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet" />
+
     <title>Professor Curador - Teste</title>
+
+    <h:outputStylesheet>
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #E8EAED;
+            background-color: #202124;
+        }
+
+        .painel-principal {
+            max-width:1000px;
+            margin:auto;
+        }
+
+        .titulo {
+            font-size: 5rem;
+            color: #42A5F5;
+        }
+
+        .mensagem-inicial {
+            font-size: 2rem;
+        }
+
+        .titulo, .mensagem-inicial {
+            font-weight: bold;
+            line-height: 1.2;
+            text-align: center;
+        }
+    </h:outputStylesheet>
 </h:head>
 
 <h:body>
-    <div class="p-card p-mx-auto p-p-4 p-mt-6" style="max-width:500px;">
-        <h1 class="p-text-center p-mb-4">Olá, Professor Curador!</h1>
-    </div>
+    <h:form enctype="multipart/form-data">
+        <div class="painel-principal">
+            <h1 class="titulo">Olá, Professor Curador!</h1>
 
-    <h:form id="single" enctype="multipart/form-data">
-        <p:fileUpload id="upload" value="#{chatBean.file}" mode="simple" skinSimple="true"/>
+            <h:panelGroup rendered="#{chatBean.cursoDTO == null}">
+                <div class="mensagem-inicial">
+                    <p>
+                        Eu irei lhe auxiliar a gerar materiais a partir de planos de ensino das unidades curriculares.
+                    </p>
 
-        <p:commandButton id="submit" value="Submit" ajax="false" action="#{chatBean.upload}" styleClass="mt-3 ui-button-outlined block"/>
+                    <p>
+                        Para darmos início ao processo, por favor envie o anexo do plano de ensino no formato PDF através dos botões baixo.
+                    </p>
+                </div>
+
+                <p:fileUpload id="upload"
+                              value="#{chatBean.file}"
+                              listener="#{chatBean.handleFileUpload}"
+                              mode="advanced"
+                              label="Selecionar"
+                              cancelLabel="Cancelar"
+                              uploadLabel="Enviar"
+                              multiple="false"
+                              update="@form">
+                    <f:facet name="empty">
+                        Arraste e solte o arquivo aqui para realizar o envio.
+                    </f:facet>
+                    <p:validateFile sizeLimit="100000" fileLimit="1" allowTypes="/(\.|\/)(pdf)$/" />
+                </p:fileUpload>
+            </h:panelGroup>
+
+            <p:growl id="growl" showDetail="true" keepAlive="true"/>
+
+            <h:panelGroup rendered="#{chatBean.cursoDTO != null}">
+                <p>
+                    <h:outputText value="#{chatBean.cursoDTO.metadadosCurso.nomeDisciplina}"/>
+                </p>
+
+                <p>
+                    <h:outputText value="#{chatBean.cursoDTO.metadadosCurso.cursoSugerido}"/>
+                </p>
+
+                <p>
+                    <h:outputText value="#{chatBean.cursoDTO.metadadosCurso.cargaHoraria}"/>
+                </p>
+
+                <ui:repeat value="#{chatBean.cursoDTO.estrutura}" var="bloco">
+                    <p>
+                        <h:outputText value="#{bloco.tituloBloco}"/>
+                    </p>
+
+                    <ui:repeat value="#{bloco.unidadesAprendizagem}" var="ua">
+                        <p>
+                            <h:outputText value="#{ua.tituloUnidadeAprendizagem}"/>
+                        </p>
+                    </ui:repeat>
+                </ui:repeat>
+            </h:panelGroup>
+        </div>
+    </h:form>
+
+
+
 
         <br/><br/>
 
         <h:panelGroup id="mensagem">
-            <h:outputText value="#{chatBean.mensagem}"/>
+            <h:panelGroup rendered="#{chatBean.cursoDTO != null}">
+                <h:outputText value="#{chatBean.cursoDTO.metadadosCurso.nomeDisciplina}"/>
+                <br/>
+                <h:outputText value="#{chatBean.cursoDTO.metadadosCurso.cursoSugerido}" />
+            </h:panelGroup>
         </h:panelGroup>
-    </h:form>
 
 </h:body>
 </html>
