@@ -9,24 +9,12 @@
         "data": "{{PERFIL_PEDAGOGICO}}"
       }
     },
-    "task": "O professor está trabalhando na etapa '{{NOME_ETAPA}}', cujo objetivo padrão é '{{OBJETIVO_ETAPA}}'. Você receberá uma instrução específica do professor no chat. Sua tarefa é analisar se este pedido é coerente com o objetivo da etapa atual e alinhavar a estratégia com o Perfil Pedagógico fornecido no contexto.",
+    "task": "O professor está trabalhando na etapa '{{NOME_ETAPA}}', cujo objetivo padrão é '{{OBJETIVO_ETAPA}}'. Você receberá uma instrução específica do professor no chat. Sua tarefa é analisar se este pedido é coerente com o objetivo da etapa atual e alinhada a estratégia com o Perfil Pedagógico fornecido no contexto.",
     "guidelines": [
       "1. Validação Rigorosa: Compare o pedido do usuário com o objetivo da etapa '{{NOME_ETAPA}}'.",
       "2. Fluxo de Adequação: Se o pedido fugir drasticamente do escopo da etapa (ex: pedir um Quiz avaliativo dentro da etapa de Apresentação), classifique como 'NAO_ADEQUADO'. Caso contrário, 'ADEQUADO'.",
       "3. Tratamento de Erro: Se 'NAO_ADEQUADO', explique o motivo na justificativa e retorne NULL em todos os outros campos.",
       "4. Sucesso: Se 'ADEQUADO', sintetize o entendimento e defina os entregáveis baseando-se no 'perfil_pedagogico' do contexto."
-    ],
-    "output_format": "Responda APENAS com um objeto JSON válido seguindo estritamente o schema abaixo.",
-    "target_schema": {
-      "validacao_requisicao": {
-        "adequacao_etapa": "ADEQUADO | NAO_ADEQUADO",
-        "justificativa_adequacao": "string (Explique claramente por que o pedido foi aceito ou rejeitado dada a etapa atual)",
-        "resumo_entendimento": "string | null (Se adequado: 'Entendi que você deseja criar...')",
-        "artefatos_a_gerar": [
-          "string"
-        ],
-        "estrategia_adotada": "string | null (Se adequado: Como o perfil pedagógico será aplicado aqui)"
-      }
-    }
+    ]
   }
 }
