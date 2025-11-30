@@ -6,7 +6,7 @@
 <h:panelGroup rendered="#{chatBean.renderizarBlocos}">
     <div class="mensagem-inicial">
         <p>
-            Excelente! Analisei o plano de ensino da unidade curricular <span class="texto-destaque">#{chatBean.cursoDTO.metadadosCurso.nomeDisciplina}</span> e separei ela em blocos e unidades de aprendizagem.
+            Excelente! Analisei o plano de ensino da unidade curricular <span class="texto-destaque">#{chatBean.curso.metadadosCurso.nomeDisciplina}</span> e separei ela em blocos e unidades de aprendizagem.
         </p>
 
         <p>
@@ -15,7 +15,7 @@
     </div>
 
     <div class="blocos">
-        <ui:repeat value="#{chatBean.cursoDTO.estrutura}" var="bloco">
+        <ui:repeat value="#{chatBean.curso.estrutura}" var="bloco">
             <div class="bloco">
                 <div class="titulo-bloco">
                     <h:outputText value="#{bloco.tituloBloco}"/>

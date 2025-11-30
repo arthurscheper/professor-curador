@@ -1,15 +1,11 @@
-package com.arthurscheper.professorcuradortoolkit.model;
+package com.arthurscheper.professorcuradortoolkit.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
 
-public class UnidadeAprendizagemDTO implements Serializable {
+public class UnidadeAprendizagem implements Serializable {
 
-    @JsonProperty("titulo_ua")
     private String tituloUnidadeAprendizagem;
-
-    @JsonProperty("topicos_chave")
     private List<String> topicosChave;
 
     public String getTituloUnidadeAprendizagem() {

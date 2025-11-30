@@ -6,7 +6,7 @@
 <h:panelGroup rendered="#{chatBean.renderizarUnidadesAprendizagens}">
     <div class="mensagem-inicial">
         <p>
-            Ótimo! Trabalharemos com o bloco <span class="texto-destaque">#{chatBean.blocoDTO.tituloBloco}</span>.
+            Ótimo! Trabalharemos com o bloco <span class="texto-destaque">#{chatBean.bloco.tituloBloco}</span>.
         </p>
 
         <p>
@@ -15,7 +15,7 @@
     </div>
 
     <div class="blocos">
-        <ui:repeat value="#{chatBean.blocoDTO.unidadesAprendizagem}" var="unidadeAprendizagem">
+        <ui:repeat value="#{chatBean.bloco.unidadesAprendizagem}" var="unidadeAprendizagem">
             <div class="bloco">
                 <div class="titulo-bloco">
                     <h:outputText value="#{unidadeAprendizagem.tituloUnidadeAprendizagem}"/>
