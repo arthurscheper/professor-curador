@@ -4,22 +4,23 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="primefaces">
 <h:panelGroup rendered="#{chatBean.renderizarEtapaTrilha}">
-    <div class="mensagem-inicial">
-        <p>
+    <div class="containerMensagem mensagemIA">
+        <div class="bolhaMensagem bolhaMensagemIA">
             Agora, selecione a etapa da trilha desejada para começarmos.
-        </p>
+        </div>
     </div>
 
-    <div class="blocos">
-        <ui:repeat value="#{chatBean.etapasTrilha}" var="faseTrilha">
-            <div class="bloco">
-                <div class="titulo-bloco">
-                    <h:outputText value="#{faseTrilha.nome}"/>
-                </div>
-
-                <p:commandButton value="Selecionar" action="#{chatBean.selecionarEtapaTrilha(faseTrilha)}" update="@form" process="@this" />
-            </div>
-        </ui:repeat>
-    </div>
+    <h:panelGroup layout="block" styleClass="containerMensagem containerOpcoesChat">
+        <div class="listaOpcoesChat">
+            <ui:repeat value="#{chatBean.etapasTrilha}" var="faseTrilha">
+                <p:commandButton styleClass="botaoOpcao"
+                                 value="#{faseTrilha.nome}"
+                                 action="#{chatBean.selecionarEtapaTrilha(faseTrilha)}"
+                                 oncomplete="rolarParaBaixoChat();"
+                                 update="@form"
+                                 process="@this"  />
+            </ui:repeat>
+        </div>
+    </h:panelGroup>
 </h:panelGroup>
 </html>

@@ -1,5 +1,6 @@
 package com.arthurscheper.professorcuradortoolkit.domain;
 
+import com.arthurscheper.professorcuradortoolkit.util.CollectionUtils;
 import dev.langchain4j.model.output.structured.Description;
 
 import java.util.List;
@@ -70,5 +71,13 @@ public class PerfilPedagogico {
 
     public void setDiretrizMestra(String diretrizMestra) {
         this.diretrizMestra = diretrizMestra;
+    }
+
+    public String getElementosObrigatoriosConcatenados() {
+        return CollectionUtils.concatenar(elementosObrigatorios);
+    }
+
+    public String getRestricoesNegativasConcatenados() {
+        return CollectionUtils.concatenar(restricoesNegativas);
     }
 }

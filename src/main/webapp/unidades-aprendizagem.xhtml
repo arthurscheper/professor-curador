@@ -3,27 +3,36 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="primefaces">
-<h:panelGroup rendered="#{chatBean.renderizarUnidadesAprendizagens}">
-    <div class="mensagem-inicial">
-        <p>
-            Ótimo! Trabalharemos com o bloco <span class="texto-destaque">#{chatBean.bloco.tituloBloco}</span>.
-        </p>
+<h:panelGroup rendered="#{chatBean.bloco != null}">
+    <div class="containerMensagem mensagemUsuario">
+        <div class="bolhaMensagem bolhaMensagemUsuario">
+            #{chatBean.bloco.tituloBloco}
+        </div>
+    </div>
 
-        <p>
+    <div class="containerMensagem mensagemIA">
+        <div class="bolhaMensagem bolhaMensagemIA">
+            Ótimo! Trabalharemos com o bloco <strong>#{chatBean.bloco.tituloBloco}</strong>.
+        </div>
+    </div>
+
+    <div class="containerMensagem mensagemIA">
+        <div class="bolhaMensagem bolhaMensagemIA">
             Para iniciarmos o desenvolvimento da trilha de aprendizagem, por favor selecione uma das unidades de aprendizagens abaixo:
-        </p>
+        </div>
     </div>
 
-    <div class="blocos">
-        <ui:repeat value="#{chatBean.bloco.unidadesAprendizagem}" var="unidadeAprendizagem">
-            <div class="bloco">
-                <div class="titulo-bloco">
-                    <h:outputText value="#{unidadeAprendizagem.tituloUnidadeAprendizagem}"/>
-                </div>
-
-                <p:commandButton value="Selecionar" action="#{chatBean.selecionarUnidadeAprendizagem(unidadeAprendizagem)}" update="@form" process="@this" />
-            </div>
-        </ui:repeat>
-    </div>
+    <h:panelGroup layout="block" styleClass="containerMensagem containerOpcoesChat" rendered="#{chatBean.renderizarUnidadesAprendizagens}">
+        <div class="listaOpcoesChat">
+            <ui:repeat value="#{chatBean.bloco.unidadesAprendizagem}" var="unidadeAprendizagem">
+                <p:commandButton styleClass="botaoOpcao"
+                                 value="#{unidadeAprendizagem.tituloUnidadeAprendizagem}"
+                                 action="#{chatBean.selecionarUnidadeAprendizagem(unidadeAprendizagem)}"
+                                 oncomplete="rolarParaBaixoChat();"
+                                 update="@form"
+                                 process="@this"  />
+            </ui:repeat>
+        </div>
+    </h:panelGroup>
 </h:panelGroup>
 </html>

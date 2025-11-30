@@ -16,6 +16,7 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class ChatBean implements Serializable {
     private FaseTrilha faseTrilha;
     private UploadedFile file;
     private String preferenciaAbordagem;
+    private List<String> preferenciasAbordagem = new ArrayList<>();
 
     private Etapa etapaAtual;
 
@@ -73,8 +75,26 @@ public class ChatBean implements Serializable {
     }
 
     public void enviarPreferenciaAbordagem() {
-        this.perfilPedagogico = aiService.enviarPreferenciaAbordagem(unidadeAprendizagem.getTituloUnidadeAprendizagem(), unidadeAprendizagem.getTopicosChave(), preferenciaAbordagem);
+        this.preferenciasAbordagem.add(preferenciaAbordagem);
+
+        this.perfilPedagogico = aiService.enviarPreferenciaAbordagem(unidadeAprendizagem.getTituloUnidadeAprendizagem(), unidadeAprendizagem.getTopicosChave(), preferenciasAbordagem);
+        alterarEtapaAtual(Etapa.CONFIRMAR_PERFIL_PEDAGOGICO);
+
+        this.preferenciaAbordagem = "";
+    }
+
+    public void redefinirPerfilPedagogico() {
+        alterarEtapaAtual(Etapa.DEFINIR_PERFIL_PEDAGOGICO);
+    }
+
+    public void confirmarPreferenciaAbordagem() {
         alterarEtapaAtual(Etapa.SELECIONAR_FASE_TRILHA);
+
+        this.preferenciaAbordagem = "";
+    }
+
+    public boolean isRenderizarAnalisePlanoEnsino() {
+        return etapaAtual.equals(Etapa.ANALISAR_PLANO_ENSINO);
     }
 
     public boolean isRenderizarBlocos() {
@@ -87,6 +107,10 @@ public class ChatBean implements Serializable {
 
     public boolean isRenderizarUnidadeAprendizagemSelecionada() {
         return etapaAtual.equals(Etapa.DEFINIR_PERFIL_PEDAGOGICO);
+    }
+
+    public boolean isRenderizarConfirmacaoPerfilPedagogico() {
+        return etapaAtual.equals(Etapa.CONFIRMAR_PERFIL_PEDAGOGICO);
     }
 
     public boolean isRenderizarEtapaTrilha() {
@@ -147,5 +171,13 @@ public class ChatBean implements Serializable {
 
     public PerfilPedagogico getPerfilPedagogico() {
         return perfilPedagogico;
+    }
+
+    public List<String> getPreferenciasAbordagem() {
+        return preferenciasAbordagem;
+    }
+
+    public void setPreferenciasAbordagem(List<String> preferenciasAbordagem) {
+        this.preferenciasAbordagem = preferenciasAbordagem;
     }
 }

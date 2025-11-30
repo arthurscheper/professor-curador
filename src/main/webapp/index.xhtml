@@ -12,6 +12,16 @@
 
     <title>Professor Curador - Teste</title>
 
+    <script type="text/javascript">
+        function rolarParaBaixoChat() {
+            var elementoChat = document.getElementById('areaExibicaoChat');
+
+            if (elementoChat) {
+                elementoChat.scrollTop = elementoChat.scrollHeight;
+            }
+        }
+    </script>
+
     <h:outputStylesheet>
         body {
             font-family: 'Roboto', sans-serif;
@@ -19,92 +29,112 @@
             background-color: #202124;
         }
 
-        .painel-principal {
-            max-width:1000px;
-            margin:auto;
-        }
-
-        .titulo {
-            font-size: 5rem;
-            color: #42A5F5;
-        }
-
-        .mensagem-inicial {
-            font-size: 2rem;
-        }
-
-        .titulo, .mensagem-inicial {
-            font-weight: bold;
-            line-height: 1.2;
-            text-align: center;
-        }
-
-        .blocos {
+        .areaChat {
+            border-radius: 8px;
+            padding: 10px;
+            height: 80vh;
+            overflow-y: auto;
             display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .containerMensagem {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .mensagemUsuario {
+            justify-content: flex-end;
+        }
+
+        .mensagemIA {
+            justify-content: flex-start;
+        }
+
+        .bolhaMensagem {
+            max-width: 60%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            line-height: 1.4;
+        }
+        .bolhaMensagemUsuario {
+            background-color: #007bff;
+            color: white;
+            border-bottom-right-radius: 2px;
+            margin-left: auto;
+        }
+        .bolhaMensagemIA {
+            background-color: #e5e5ea;
+            color: #000;
+            border-bottom-left-radius: 2px;
+            margin-right: auto;
+        }
+
+        .rodapeChat {
+            display: flex;
+            padding-top: 10px;
+            gap: 5px;
+        }
+        .inputMensagem {
+            flex-grow: 1;
+        }
+
+        .containerOpcoesChat {
             justify-content: space-evenly;
+            padding-top: 5px;
+            margin-top: 5px;
         }
 
-        .bloco {
-            background-color: #383b42;
-            height: 300px;
-            width: 300px;
-            padding: 20px;
-            border-radius: 6px;
+        .listaOpcoesChat {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0 !important;
         }
 
-        .titulo-bloco {
-            width: 100%;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2rem;
+        .listaOpcoesChat .ui-datalist-item {
+            width: auto !important;
+            padding: 0 !important;
         }
 
-        .texto-destaque {
-            font-weight: bold;
-            color: #42A5F5;
+        .botaoOpcao {
+            max-width: 200px;
+            width: auto;
+            flex-shrink: 0;
         }
 
-        .mensagem-professor {
-            width: 100%;
-            background-color: #202124 !important;
-            color: #E8EAED !important;
-            border: 1px solid #3C4043;
-            border-radius: 508px;
-            padding: 16px 20px;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
-            transition: all 0.2s ease;
-            font-family: 'Roboto', sans-serif;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .botao-enviar {
-            width: 100%;
-            margin-top: 20px;
-            text-align: right;
+        .botaoOpcao .ui-button-text {
+            display: block;
+            max-width: 170px;
         }
     </h:outputStylesheet>
 </h:head>
 
 <h:body>
-    <h:form enctype="multipart/form-data">
-        <div class="painel-principal">
-            <h1 class="titulo">Olá, Professor Curador!</h1>
+    <p:growl id="mensagensSistema" showDetail="true" />
 
-            <h:panelGroup rendered="#{chatBean.curso == null}">
-                <div class="mensagem-inicial">
-                    <p>
-                        Eu irei lhe auxiliar a gerar materiais a partir de planos de ensino das unidades curriculares.
-                    </p>
+    <h:form id="formularioChat" enctype="multipart/form-data">
+        <p:panel header="Olá, Professor Curador!" style="width: 800px; margin: 20px auto;">
+            <div id="areaExibicaoChat" class="areaChat">
+                <div class="containerMensagem mensagemIA">
+                    <div class="bolhaMensagem bolhaMensagemIA">
+                        <h:outputText value="Eu irei lhe auxiliar a gerar materiais a partir de planos de ensino das unidades curriculares." />
+                    </div>
+                </div>
 
-                    <p>
-                        Para darmos início ao processo, por favor envie o anexo do plano de ensino no formato PDF através dos botões baixo.
-                    </p>
+                <div class="containerMensagem mensagemIA">
+                    <div class="bolhaMensagem bolhaMensagemIA">
+                        <h:outputText value="Para darmos início ao processo, por favor envie o anexo do plano de ensino no formato PDF através dos botões baixo."/>
+                    </div>
                 </div>
 
                 <p:fileUpload id="upload"
                               value="#{chatBean.file}"
                               listener="#{chatBean.handleFileUpload}"
+                              rendered="#{chatBean.renderizarAnalisePlanoEnsino}"
                               mode="advanced"
                               label="Selecionar"
                               cancelLabel="Cancelar"
@@ -116,15 +146,33 @@
                     </f:facet>
                     <p:validateFile sizeLimit="100000" fileLimit="1" allowTypes="/(\.|\/)(pdf)$/" />
                 </p:fileUpload>
-            </h:panelGroup>
 
-            <p:growl id="growl" showDetail="true" keepAlive="true"/>
+                <ui:include src="blocos.xhtml" />
+                <ui:include src="unidades-aprendizagem.xhtml" />
+                <ui:include src="unidade-aprendizagem-selecionada.xhtml" />
+                <ui:include src="confirmacao-perfil-pedagogico.xhtml" />
+                <ui:include src="etapas-trilha.xhtml" />
+            </div>
 
-            <ui:include src="blocos.xhtml" />
-            <ui:include src="unidades-aprendizagem.xhtml" />
-            <ui:include src="unidade-aprendizagem-selecionada.xhtml" />
-            <ui:include src="etapas-trilha.xhtml"/>
-        </div>
+
+            <f:facet name="footer">
+                <h:panelGroup rendered="#{chatBean.renderizarUnidadeAprendizagemSelecionada}">
+                <div class="rodapeChat">
+                    <p:inputText id="campoMensagem"
+                                 placeholder="Digite sua mensagem..."
+                                 value="#{chatBean.preferenciaAbordagem}"
+                                 styleClass="inputMensagem"
+                                 required="true"/>
+
+                    <p:commandButton id="botaoEnviar"
+                                     action="#{chatBean.enviarPreferenciaAbordagem()}" update="@form"
+                                     oncomplete="rolarParaBaixoChat();"
+                                     icon="pi pi-send"
+                                     style="width: 100px;"/>
+                </div>
+                </h:panelGroup>
+            </f:facet>
+        </p:panel>
     </h:form>
 </h:body>
 </html>
