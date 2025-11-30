@@ -1,6 +1,6 @@
 package com.arthurscheper.professorcuradortoolkit.domain;
 
-public enum EtapaTrilha {
+public enum FaseTrilha {
 
     APRESENTACAO(1, "Apresentação", "Introduzir o tema, despertar interesse e mostrar relevância."),
     TEORIA(2, "Teoria", "Aprofundar conceitos técnicos e fundamentação."),
@@ -12,7 +12,7 @@ public enum EtapaTrilha {
     private final String nome;
     private final String objetivo;
 
-    EtapaTrilha(int id, String nome, String objetivo) {
+    FaseTrilha(int id, String nome, String objetivo) {
         this.id = id;
         this.nome = nome;
         this.objetivo = objetivo;
@@ -31,9 +31,9 @@ public enum EtapaTrilha {
     }
 
     // Método utilitário para buscar o Enum pelo ID numérico
-    // Ex: EtapaTrilha.fromId(1) retorna EtapaTrilha.APRESENTACAO
-    public static EtapaTrilha fromId(int id) {
-        for (EtapaTrilha etapa : values()) {
+    // Ex: FaseTrilha.fromId(1) retorna FaseTrilha.APRESENTACAO
+    public static FaseTrilha fromId(int id) {
+        for (FaseTrilha etapa : values()) {
             if (etapa.getId() == id) {
                 return etapa;
             }

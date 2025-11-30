@@ -17,7 +17,7 @@
     <p:inputTextarea rows="3" styleClass="mensagem-professor" placeholder="Digite aqui" value="#{chatBean.preferenciaAbordagem}"/>
 
     <div class="botao-enviar">
-        <p:commandButton value="Enviar" action="#{chatBean.enviarPreferenciaAbordagem()}"/>
+        <p:commandButton value="Enviar" action="#{chatBean.enviarPreferenciaAbordagem()}" update="@form"/>
     </div>
 </h:panelGroup>
 </html>
