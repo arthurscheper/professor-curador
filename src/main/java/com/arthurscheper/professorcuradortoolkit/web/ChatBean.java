@@ -1,5 +1,6 @@
 package com.arthurscheper.professorcuradortoolkit.web;
 
+import com.arthurscheper.professorcuradortoolkit.domain.PerfilPedagogico;
 import com.arthurscheper.professorcuradortoolkit.service.AiService;
 import com.arthurscheper.professorcuradortoolkit.domain.Bloco;
 import com.arthurscheper.professorcuradortoolkit.domain.Curso;
@@ -21,6 +22,7 @@ public class ChatBean implements Serializable {
     private Bloco bloco;
     private UnidadeAprendizagem unidadeAprendizagem;
     private UploadedFile file;
+    private String preferenciaAbordagem;
     
     @Inject
     private AiService aiService;
@@ -86,5 +88,20 @@ public class ChatBean implements Serializable {
 
     public void setCurso(Curso curso) {
         this.curso = curso;
+    }
+
+    public String getPreferenciaAbordagem() {
+        return preferenciaAbordagem;
+    }
+
+    public void setPreferenciaAbordagem(String preferenciaAbordagem) {
+        this.preferenciaAbordagem = preferenciaAbordagem;
+    }
+
+    public void enviarPreferenciaAbordagem() {
+        PerfilPedagogico perfilPedagogico = aiService.enviarPreferenciaAbordagem(
+                unidadeAprendizagem.getTituloUnidadeAprendizagem(), unidadeAprendizagem.getTopicosChave(), preferenciaAbordagem);
+
+        System.out.println(perfilPedagogico);
     }
 }

@@ -14,10 +14,10 @@
         </p>
     </div>
 
-    <p:inputTextarea rows="3" styleClass="mensagem-professor" placeholder="Digite aqui" />
+    <p:inputTextarea rows="3" styleClass="mensagem-professor" placeholder="Digite aqui" value="#{chatBean.preferenciaAbordagem}"/>
 
     <div class="botao-enviar">
-        <p:commandButton value="Enviar"/>
+        <p:commandButton value="Enviar" action="#{chatBean.enviarPreferenciaAbordagem()}"/>
     </div>
 </h:panelGroup>
 </html>
