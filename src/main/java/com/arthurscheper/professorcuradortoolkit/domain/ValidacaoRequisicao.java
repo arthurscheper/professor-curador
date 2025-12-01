@@ -1,12 +1,8 @@
 package com.arthurscheper.professorcuradortoolkit.domain;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.langchain4j.model.output.structured.Description;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ValidacaoRequisicao {
 
