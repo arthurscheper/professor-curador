@@ -1,7 +1,12 @@
 package com.arthurscheper.professorcuradortoolkit.domain;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.langchain4j.model.output.structured.Description;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ValidacaoRequisicao {
 
@@ -24,6 +29,10 @@ public class ValidacaoRequisicao {
 
     @Description("Se adequado: breve explicação de como o perfil pedagógico será aplicado nesta geração. Se não adequado, deve ser null.")
     private String estrategiaAdotada;
+
+    public SinteseRequisicao getSinteseRequisicao() {
+        return new SinteseRequisicao(resumoEntendimento, artefatosAGerar, estrategiaAdotada);
+    }
 
     // Getters e Setters
 

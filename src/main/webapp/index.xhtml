@@ -152,24 +152,25 @@
                 <ui:include src="unidade-aprendizagem-selecionada.xhtml" />
                 <ui:include src="confirmacao-perfil-pedagogico.xhtml" />
                 <ui:include src="etapas-trilha.xhtml" />
-            </div>
+            <ui:include src="gerar-prompt.xhtml"/>
+        </div>
 
 
             <f:facet name="footer">
                 <h:panelGroup rendered="#{chatBean.renderizarUnidadeAprendizagemSelecionada}">
-                <div class="rodapeChat">
-                    <p:inputText id="campoMensagem"
-                                 placeholder="Digite sua mensagem..."
-                                 value="#{chatBean.preferenciaAbordagem}"
-                                 styleClass="inputMensagem"
-                                 required="true"/>
+                    <div class="rodapeChat">
+                        <p:inputText id="campoMensagem"
+                                     placeholder="Digite sua mensagem..."
+                                     value="#{chatBean.preferenciaAbordagem}"
+                                     styleClass="inputMensagem"
+                                     required="true"/>
 
-                    <p:commandButton id="botaoEnviar"
-                                     action="#{chatBean.enviarPreferenciaAbordagem()}" update="@form"
-                                     oncomplete="rolarParaBaixoChat();"
-                                     icon="pi pi-send"
-                                     style="width: 100px;"/>
-                </div>
+                        <p:commandButton id="botaoEnviar"
+                                         action="#{chatBean.enviarPreferenciaAbordagem()}" update="@form"
+                                         oncomplete="rolarParaBaixoChat();"
+                                         icon="pi pi-send"
+                                         style="width: 100px;"/>
+                    </div>
                 </h:panelGroup>
             </f:facet>
         </p:panel>

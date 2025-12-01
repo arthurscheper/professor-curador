@@ -3,6 +3,8 @@ package com.arthurscheper.professorcuradortoolkit.web;
 import com.arthurscheper.professorcuradortoolkit.domain.Etapa;
 import com.arthurscheper.professorcuradortoolkit.domain.FaseTrilha;
 import com.arthurscheper.professorcuradortoolkit.domain.PerfilPedagogico;
+import com.arthurscheper.professorcuradortoolkit.domain.ResultadoRefinamentoPrompt;
+import com.arthurscheper.professorcuradortoolkit.domain.ValidacaoRequisicao;
 import com.arthurscheper.professorcuradortoolkit.service.AiService;
 import com.arthurscheper.professorcuradortoolkit.domain.Bloco;
 import com.arthurscheper.professorcuradortoolkit.domain.Curso;
@@ -32,6 +34,7 @@ public class ChatBean implements Serializable {
     private UploadedFile file;
     private String preferenciaAbordagem;
     private List<String> preferenciasAbordagem = new ArrayList<>();
+    private String requisicao;
 
     private Etapa etapaAtual;
 
@@ -40,6 +43,8 @@ public class ChatBean implements Serializable {
 
     @Inject
     private FileService fileService;
+    private ResultadoRefinamentoPrompt ultimoResultado;
+    private ValidacaoRequisicao validacaoRequisicao;
 
     @PostConstruct
     public void init() {
@@ -72,6 +77,7 @@ public class ChatBean implements Serializable {
 
     public void selecionarEtapaTrilha(FaseTrilha faseTrilha) {
         this.faseTrilha = faseTrilha;
+        alterarEtapaAtual(Etapa.REFINAMENTO_PROMPT);
     }
 
     public void enviarPreferenciaAbordagem() {
@@ -111,6 +117,10 @@ public class ChatBean implements Serializable {
 
     public boolean isRenderizarConfirmacaoPerfilPedagogico() {
         return etapaAtual.equals(Etapa.CONFIRMAR_PERFIL_PEDAGOGICO);
+    }
+
+    public boolean isRenderizarGerarPrompt() {
+        return etapaAtual.equals(Etapa.REFINAMENTO_PROMPT);
     }
 
     public boolean isRenderizarEtapaTrilha() {
@@ -161,7 +171,7 @@ public class ChatBean implements Serializable {
         return Arrays.asList(FaseTrilha.values());
     }
 
-    public FaseTrilha getEtapaTrilha() {
+    public FaseTrilha getFaseTrilha() {
         return faseTrilha;
     }
 
@@ -171,6 +181,31 @@ public class ChatBean implements Serializable {
 
     public PerfilPedagogico getPerfilPedagogico() {
         return perfilPedagogico;
+    }
+
+    public String getRequisicao() {
+        return requisicao;
+    }
+
+    public void setRequisicao(String requisicao) {
+        this.requisicao = requisicao;
+    }
+
+    public ResultadoRefinamentoPrompt getUltimoResultado() {
+        return ultimoResultado;
+    }
+
+    public void setUltimoResultado(ResultadoRefinamentoPrompt ultimoResultado) {
+        this.ultimoResultado = ultimoResultado;
+    }
+
+    public void setValidacaoRequisicao(ValidacaoRequisicao validacaoRequisicao) {
+        this.validacaoRequisicao = validacaoRequisicao;
+    }
+
+    public void enviarRequisicao() {
+        validacaoRequisicao = aiService.analisarRequisicao(perfilPedagogico, faseTrilha.getNome(), faseTrilha.getObjetivo(), requisicao);
+        ultimoResultado = aiService.gerarPrompt(perfilPedagogico, validacaoRequisicao.getSinteseRequisicao(), requisicao);
     }
 
     public List<String> getPreferenciasAbordagem() {
