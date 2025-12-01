@@ -1,0 +1,24 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <cc:interface>
+        <cc:attribute name="mensagem" required="true" />
+    </cc:interface>
+
+    <cc:implementation>
+        <h:panelGroup layout="block" styleClass="containerMensagem #{cc.attrs.mensagem.tipo.classeMensagem}" rendered="#{cc.attrs.mensagem.mensagemTexto}">
+            <div id="bolhaMensagem-#{cc.attrs.mensagem.id}" data-msgid="#{cc.attrs.mensagem.id}" class="bolhaMensagem #{cc.attrs.mensagem.tipo.classeBolha}">
+                <h:outputText value="#{cc.attrs.mensagem.texto}" escape="false"/>
+
+                <h:panelGroup rendered="#{cc.attrs.mensagem.digitando}" layout="block" styleClass="digitando">
+                    <div class="ponto" />
+                    <div class="ponto" />
+                    <div class="ponto" />
+                </h:panelGroup>
+            </div>
+        </h:panelGroup>
+    </cc:implementation>
+</ui:composition>

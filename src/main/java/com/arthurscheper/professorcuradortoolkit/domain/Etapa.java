@@ -2,6 +2,7 @@ package com.arthurscheper.professorcuradortoolkit.domain;
 
 public enum Etapa {
     ANALISAR_PLANO_ENSINO,
+    ANALISANDO_PLANO_ENSINO,
     SELECIONAR_BLOCO,
     SELECIONAR_UNIDADE_APRENDIZAGEM,
     DEFINIR_PERFIL_PEDAGOGICO,

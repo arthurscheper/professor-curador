@@ -37,7 +37,6 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            background-color: #f9f9f9;
         }
 
         .containerMensagem {
@@ -53,6 +52,11 @@
             justify-content: flex-start;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
         .bolhaMensagem {
             max-width: 60%;
             padding: 10px 15px;
@@ -60,6 +64,12 @@
             box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
             line-height: 1.4;
         }
+
+        .bolhaMensagem.animar {
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+        }
+
         .bolhaMensagemUsuario {
             background-color: #007bff;
             color: white;
@@ -110,6 +120,28 @@
             display: block;
             max-width: 170px;
         }
+
+        .digitando {
+            display: flex;
+            gap: 6px;
+        }
+
+        .ponto {
+            width: 8px;
+            height: 8px;
+            background: #6B7280;
+            border-radius: 50%;
+            animation: blink 1s infinite ease-in-out;
+        }
+
+        .ponto:nth-child(2) { animation-delay: 0.2s; }
+        .ponto:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes blink {
+            0% { opacity: 0.2; transform: translateY(0px); }
+            50% { opacity: 1; transform: translateY(-4px); }
+            100% { opacity: 0.2; transform: translateY(0px); }
+        }
     </h:outputStylesheet>
 </h:head>
 
@@ -117,63 +149,72 @@
     <p:growl id="mensagensSistema" showDetail="true" />
 
     <h:form id="formularioChat" enctype="multipart/form-data">
-        <p:panel header="Olá, Professor Curador!" style="width: 800px; margin: 20px auto;">
-            <div id="areaExibicaoChat" class="areaChat">
-                <div class="containerMensagem mensagemIA">
-                    <div class="bolhaMensagem bolhaMensagemIA">
-                        <h:outputText value="Eu irei lhe auxiliar a gerar materiais a partir de planos de ensino das unidades curriculares." />
-                    </div>
-                </div>
-
-                <div class="containerMensagem mensagemIA">
-                    <div class="bolhaMensagem bolhaMensagemIA">
-                        <h:outputText value="Para darmos início ao processo, por favor envie o anexo do plano de ensino no formato PDF através dos botões baixo."/>
-                    </div>
-                </div>
-
-                <p:fileUpload id="upload"
-                              value="#{chatBean.file}"
-                              listener="#{chatBean.handleFileUpload}"
-                              rendered="#{chatBean.renderizarAnalisePlanoEnsino}"
-                              mode="advanced"
-                              label="Selecionar"
-                              cancelLabel="Cancelar"
-                              uploadLabel="Enviar"
-                              multiple="false"
-                              update="@form">
-                    <f:facet name="empty">
-                        Arraste e solte o arquivo aqui para realizar o envio.
-                    </f:facet>
-                    <p:validateFile sizeLimit="100000" fileLimit="1" allowTypes="/(\.|\/)(pdf)$/" />
-                </p:fileUpload>
-
-                <ui:include src="blocos.xhtml" />
-                <ui:include src="unidades-aprendizagem.xhtml" />
-                <ui:include src="unidade-aprendizagem-selecionada.xhtml" />
-                <ui:include src="confirmacao-perfil-pedagogico.xhtml" />
-                <ui:include src="etapas-trilha.xhtml" />
-            <ui:include src="gerar-prompt.xhtml"/>
-        </div>
-
+        <p:panel header="Assistente Virtual de Professor Curador" style="width: 800px; margin: 20px auto;">
+            <ui:include src="chat.xhtml" />
 
             <f:facet name="footer">
-                <h:panelGroup rendered="#{chatBean.renderizarUnidadeAprendizagemSelecionada}">
-                    <div class="rodapeChat">
-                        <p:inputText id="campoMensagem"
-                                     placeholder="Digite sua mensagem..."
-                                     value="#{chatBean.preferenciaAbordagem}"
-                                     styleClass="inputMensagem"
-                                     required="true"/>
+                <div class="rodapeChat">
+                    <p:inputText id="campoMensagem"
+                                 placeholder="Digite sua mensagem..."
+                                 value="#{chatBean.mensagemUsuario}"
+                                 disabled="#{chatBean.bloquearMensagemUsuario}"
+                                 styleClass="inputMensagem"/>
 
-                        <p:commandButton id="botaoEnviar"
-                                         action="#{chatBean.enviarPreferenciaAbordagem()}" update="@form"
-                                         oncomplete="rolarParaBaixoChat();"
-                                         icon="pi pi-send"
-                                         style="width: 100px;"/>
-                    </div>
-                </h:panelGroup>
+                    <p:commandButton id="botaoEnviar"
+                                     action="#{chatBean.enviarMensagemUsuario()}"
+                                     disabled="#{chatBean.bloquearMensagemUsuario}"
+                                     update="@form"
+                                     oncomplete="processarMensagemUsuario()"
+                                     icon="pi pi-send"
+                                     style="width: 100px;"/>
+                </div>
             </f:facet>
         </p:panel>
     </h:form>
+
+    <p:remoteCommand name="avaliarPlanoEnsino"
+                     onstart="animarNovasMensagens()"
+                     oncomplete="animarNovasMensagens()"
+                     actionListener="#{chatBean.analisarPlanoEnsino()}"
+                     update="formularioChat"/>
+
+    <p:remoteCommand name="processarMensagemUsuario"
+                     onstart="animarNovasMensagens()"
+                     oncomplete="animarNovasMensagens()"
+                     actionListener="#{chatBean.processarMensagemUsuario()}"
+                     update="formularioChat"/>
+
+    <script>
+        window.seenMessageIds = window.seenMessageIds || new Set();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const msgs = document.querySelectorAll('.bolhaMensagem');
+            msgs.forEach(m => {
+                const id = m.dataset.msgid;
+                if (id) window.seenMessageIds.add(id);
+            });
+        });
+
+        function animarNovasMensagens() {
+            const msgs = document.querySelectorAll('.bolhaMensagem');
+            msgs.forEach(m => {
+                const id = m.dataset.msgid;
+                if (!id) return;
+                if (!window.seenMessageIds.has(id)) {
+                    m.classList.add('animar');
+                    window.seenMessageIds.add(id);
+                } else {
+                    m.classList.remove('animar');
+                }
+            });
+
+            scrollChatToBottom();
+        }
+
+        function scrollChatToBottom() {
+            const chat = document.getElementById('areaExibicaoChat');
+            if (chat) chat.scrollTop = chat.scrollHeight;
+        }
+    </script>
 </h:body>
 </html>

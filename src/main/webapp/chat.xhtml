@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:projeto="http://xmlns.jcp.org/jsf/composite/componentes">
+    <div id="areaExibicaoChat" class="areaChat">
+        <ui:repeat value="#{chatBean.chat.mensagens}" var="mensagem">
+            <projeto:mensagemChat mensagem="#{mensagem}" />
+            <projeto:selecaoOpcoes mensagem="#{mensagem}" opcoes="#{mensagem.opcoes}" />
+            <projeto:uploadArquivo mensagem="#{mensagem}" />
+        </ui:repeat>
+    </div>
+</html>
