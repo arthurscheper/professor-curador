@@ -99,6 +99,11 @@ public class ChatBean implements Serializable {
         this.preferenciaAbordagem = "";
     }
 
+    public void enviarRequisicao() {
+        validacaoRequisicao = aiService.analisarRequisicao(perfilPedagogico, faseTrilha.getNome(), faseTrilha.getObjetivo(), curso, requisicao);
+        ultimoResultado = aiService.gerarPrompt(perfilPedagogico, validacaoRequisicao.getSinteseRequisicao(), requisicao);
+    }
+
     public boolean isRenderizarAnalisePlanoEnsino() {
         return etapaAtual.equals(Etapa.ANALISAR_PLANO_ENSINO);
     }
@@ -201,11 +206,6 @@ public class ChatBean implements Serializable {
 
     public void setValidacaoRequisicao(ValidacaoRequisicao validacaoRequisicao) {
         this.validacaoRequisicao = validacaoRequisicao;
-    }
-
-    public void enviarRequisicao() {
-        validacaoRequisicao = aiService.analisarRequisicao(perfilPedagogico, faseTrilha.getNome(), faseTrilha.getObjetivo(), curso, requisicao);
-        ultimoResultado = aiService.gerarPrompt(perfilPedagogico, validacaoRequisicao.getSinteseRequisicao(), requisicao);
     }
 
     public List<String> getPreferenciasAbordagem() {
