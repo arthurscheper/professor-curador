@@ -1,0 +1,36 @@
+{
+  "metadadosCurso" : {
+    "nomeDisciplina" : "Gestão de projetos e gestão de manutenção",
+    "curso" : "Engenharias",
+    "cargaHoraria" : "60h",
+    "bibliografia" : [ "PMI. Um Guia para o Conjunto de Conhecimentos em Gerenciamento de Projetos (Guia PMBOK). 6. ed. Newtown Square, PA: Project Management Institute, 2017.", "PALAZZO, C. Gestão de Projetos: Como gerenciar projetos em sua empresa. 3. ed. Rio de Janeiro: FGV, 2018.", "VIANA, R. Gestão de Manutenção: Uma Abordagem Prática. São Paulo: Érica, 2019.", "VARGAS, R. Gerenciamento de Projetos: Estabelecendo Diferenciais Competitivos. 8. ed. Rio de Janeiro: Brasport, 2018.", "MOURA, A. Manutenção Industrial: Conceitos e Aplicações. Rio de Janeiro: LTC, 2017.", "OLIVEIRA, S. Gestão Estratégica da Manutenção. São Paulo: Atlas, 2016." ]
+  },
+  "estrutura" : [ {
+    "tituloBloco" : "Introdução à Gestão de Projetos",
+    "unidadesAprendizagem" : [ {
+      "tituloUnidadeAprendizagem" : "Conceitos Fundamentais de Projetos",
+      "topicosChave" : [ "Definição de projeto, programa e portfólio", "Ciclo de vida do projeto e fases", "Partes interessadas no projeto", "O papel do gerente de projetos" ]
+    }, {
+      "tituloUnidadeAprendizagem" : "Áreas de Conhecimento do PMBOK",
+      "topicosChave" : [ "Gerenciamento da integração do projeto", "Gerenciamento do escopo do projeto", "Gerenciamento do cronograma do projeto", "Gerenciamento dos custos do projeto", "Gerenciamento da qualidade do projeto" ]
+    } ]
+  }, {
+    "tituloBloco" : "Planejamento e Execução de Projetos",
+    "unidadesAprendizagem" : [ {
+      "tituloUnidadeAprendizagem" : "Processos de Planejamento de Projetos",
+      "topicosChave" : [ "Desenvolvimento do plano de gerenciamento do projeto", "Coleta de requisitos e definição de escopo", "Criação da Estrutura Analítica do Projeto (EAP/WBS)", "Estimativa de duração e recursos das atividades", "Orçamentação e controle de custos" ]
+    }, {
+      "tituloUnidadeAprendizagem" : "Monitoramento e Controle de Projetos",
+      "topicosChave" : [ "Monitoramento do trabalho do projeto", "Controle integrado de mudanças", "Gerenciamento de riscos do projeto", "Gerenciamento de comunicações e aquisições" ]
+    } ]
+  }, {
+    "tituloBloco" : "Gestão da Manutenção",
+    "unidadesAprendizagem" : [ {
+      "tituloUnidadeAprendizagem" : "Fundamentos e Estratégias de Manutenção",
+      "topicosChave" : [ "Conceitos e importância da manutenção", "Tipos de manutenção (corretiva, preventiva, preditiva)", "Estratégias de manutenção" ]
+    }, {
+      "tituloUnidadeAprendizagem" : "Integração da Manutenção em Projetos",
+      "topicosChave" : [ "Manutenção e ciclo de vida do ativo", "Planejamento da manutenção em projetos", "Ferramentas e tecnologias para gestão da manutenção" ]
+    } ]
+  } ]
+}

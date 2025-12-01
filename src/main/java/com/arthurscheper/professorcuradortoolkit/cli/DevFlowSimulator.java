@@ -9,6 +9,8 @@ import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,6 +22,7 @@ public class DevFlowSimulator {
     // Configuration Paths
     private static final String PROPERTIES_PATH = "src/main/resources/META-INF/microprofile-config.properties";
     private static final String PDF_PATH = "src/main/resources/ementa/gestao-projetos-e-gestao-manutencao.pdf";
+    private static final String EMENTA_JSON_PATH = "src/main/resources/autoMode/ementa.json";
 
     private ChatModel virtualProfessorModel;
     private AiService aiService;
@@ -103,6 +106,45 @@ public class DevFlowSimulator {
 
     private Curso analyzePdf() throws IOException {
         System.out.println("\n[ETAPA 1] Lendo e Analisando Plano de Ensino...");
+        Curso curso;
+
+        if (isAutoMode) {
+            curso = loadCursoFromJson(EMENTA_JSON_PATH);
+            System.out.println(">> Modo Auto: Plano de ensino carregado do arquivo JSON pré-processado.");
+        } else {
+            System.out.println("Deseja usar o plano de ensino pré-processado (ementa.json) ou enviar o PDF para a IA?");
+            System.out.println("1 - Usar JSON pré-processado (mais rápido)");
+            System.out.println("2 - Enviar PDF para IA (mais lento, processamento real)");
+            System.out.print("> ");
+            String choice = scanner.nextLine().trim();
+
+            if ("1".equals(choice)) {
+                curso = loadCursoFromJson(EMENTA_JSON_PATH);
+                System.out.println(">> Plano de ensino carregado do arquivo JSON pré-processado.");
+            } else {
+                curso = processPdfWithAi();
+                System.out.println(">> Plano de ensino processado pela IA.");
+            }
+        }
+        printCurso(curso);
+        return curso;
+    }
+
+    private Curso loadCursoFromJson(String jsonPath) throws IOException {
+        Path jsonFilePath = Paths.get(jsonPath);
+        if (!Files.exists(jsonFilePath)) {
+            throw new RuntimeException("Arquivo JSON de ementa não encontrado: " + jsonPath);
+        }
+        String jsonContent = Files.readString(jsonFilePath);
+        ObjectMapper objectMapper = new ObjectMapper(); // Assuming Jackson is available
+        try {
+            return objectMapper.readValue(jsonContent, Curso.class);
+        } catch (Exception e) {
+            throw new IOException("Erro ao deserializar JSON da ementa: " + e.getMessage(), e);
+        }
+    }
+
+    private Curso processPdfWithAi() throws IOException {
         Path pdfPath = Paths.get(PDF_PATH);
         if (!Files.exists(pdfPath)) {
             throw new RuntimeException("Arquivo PDF não encontrado: " + PDF_PATH);
@@ -110,10 +152,7 @@ public class DevFlowSimulator {
         byte[] pdfBytes = Files.readAllBytes(pdfPath);
         String base64Pdf = Base64.getEncoder().encodeToString(pdfBytes);
         PdfFileContent pdfContent = PdfFileContent.from(base64Pdf, "application/pdf");
-
-        Curso curso = aiService.analisarPlanoEnsino(pdfContent);
-        printCurso(curso);
-        return curso;
+        return aiService.analisarPlanoEnsino(pdfContent);
     }
 
     private Selection selectBlockAndUa(Curso curso) {
@@ -167,15 +206,36 @@ public class DevFlowSimulator {
 
     private SinteseRequisicao validateAndAnalyzeRequest(Curso curso, PerfilPedagogico perfil) {
         System.out.println("\n[ETAPA 3] Validando Requisição...");
-        FaseTrilha faseTrilha = FaseTrilha.AVALIACAO_QUIZ;
+
+        FaseTrilha faseTrilha;
+        if (isAutoMode) {
+            FaseTrilha[] fases = FaseTrilha.values();
+            faseTrilha = fases[new Random().nextInt(fases.length)];
+            System.out.println(">> Modo Auto: Fase selecionada aleatoriamente: " + faseTrilha.getNome());
+        } else {
+            System.out.println("Selecione a Fase da Trilha:");
+            for (FaseTrilha f : FaseTrilha.values()) {
+                System.out.println(f.getId() + " - " + f.getNome() + " (" + f.getObjetivo() + ")");
+            }
+            System.out.print("> ");
+            try {
+                int faseId = Integer.parseInt(scanner.nextLine());
+                faseTrilha = FaseTrilha.fromId(faseId);
+            } catch (Exception e) {
+                System.out.println("Seleção inválida. Usando padrão: " + FaseTrilha.AVALIACAO_QUIZ.getNome());
+                faseTrilha = FaseTrilha.AVALIACAO_QUIZ;
+            }
+        }
 
         String userRequest;
         if (isAutoMode) {
-            // FORCE TEST: Request based on bibliography to verify the fix
-            userRequest = "Crie um quiz de 5 perguntas baseando-se estritamente na bibliografia básica do curso.";
-            System.out.println(">> Professor Virtual (Forçado) pede: " + userRequest);
+            String prompt = "Você é um professor universitário. A fase atual da aula é '" + faseTrilha.getNome() +
+                    "' com o objetivo: '" + faseTrilha.getObjetivo() + "'. " +
+                    "Faça uma requisição curta (1 frase) ao assistente de IA para gerar um material pertinente a esta fase.";
+            userRequest = askVirtualProfessor(prompt);
+            System.out.println(">> Professor Virtual pede: " + userRequest);
         } else {
-            System.out.println(">> O que você deseja criar? (ex: 'Crie um quiz de 5 perguntas')");
+            System.out.println(">> O que você deseja criar para a fase '" + faseTrilha.getNome() + "'? (ex: 'Crie um quiz de 5 perguntas')");
             System.out.print("> ");
             userRequest = scanner.nextLine();
         }
