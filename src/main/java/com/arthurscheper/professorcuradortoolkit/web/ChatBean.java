@@ -108,11 +108,36 @@ public class ChatBean implements Serializable {
             selecionarEtapaTrilha((FaseTrilha) opcaoChat.getValor());
         } else if (opcaoChat.getValor() instanceof ContinuarRefinamento) {
             continuarRefinamento((ContinuarRefinamento) opcaoChat.getValor());
+        } else if (opcaoChat.getValor() instanceof OpcaoUltimoProcesso) {
+            escolherNovoProcesso(opcaoChat);
         }
 
         opcaoChat.setSelecionado(true);
 
         mensagemChat.getOpcoes().forEach(opcao -> opcao.setDesabilitar(true));
+    }
+
+    private void escolherNovoProcesso(OpcaoChat opcaoChat) {
+        var opcaoUltimoProcesso = (OpcaoUltimoProcesso) opcaoChat.getValor();
+
+        if (UltimoProcesso.FINALIZAR.equals(opcaoUltimoProcesso.getProcesso())) {
+            chat.adicionarMensagemIA("Certo. Muito obrigado!");
+        } else if (UltimoProcesso.NOVO_BLOCO.equals(opcaoUltimoProcesso.getProcesso())) {
+            chat.adicionarMensagemIA("Muito bem, selecione o bloco que deseja trabalhar:");
+            chat.adicionarOpcoes(curso.getEstrutura().stream().map(bloco -> new OpcaoChat(bloco.getTituloBloco(), bloco)).collect(Collectors.toList()));
+
+            alterarEtapaAtual(Etapa.SELECIONAR_BLOCO);
+        } else if (UltimoProcesso.NOVA_UA.equals(opcaoUltimoProcesso.getProcesso())) {
+            chat.adicionarMensagemIA("Muito bem, seleciona a Unidade de Aprendizagem que deseja trabalhar:");
+            chat.adicionarOpcoes(bloco.getUnidadesAprendizagem().stream().map(unidadeAprendizagem -> new OpcaoChat(unidadeAprendizagem.getTituloUnidadeAprendizagem(), unidadeAprendizagem)).collect(Collectors.toList()));
+
+            alterarEtapaAtual(Etapa.SELECIONAR_UNIDADE_APRENDIZAGEM);
+        } else if (UltimoProcesso.NOVA_ETAPA_TRILHA.equals(opcaoUltimoProcesso.getProcesso())) {
+            chat.adicionarMensagemIA("Muito bem, selecione a etapa da trilha desejada para começarmos.");
+            chat.adicionarOpcoes(getEtapasTrilha().stream().map(etapa -> new OpcaoChat(etapa.getNome(), etapa)).collect(Collectors.toList()));
+
+            alterarEtapaAtual(Etapa.SELECIONAR_FASE_TRILHA);
+        }
     }
 
     private void continuarRefinamento(ContinuarRefinamento valor) {
@@ -125,6 +150,9 @@ public class ChatBean implements Serializable {
         alterarEtapaAtual(Etapa.PROMPT_FINALIZADO);
         chat.adicionarMensagemIA("Aqui está seu prompt finalizado.");
         chat.adicionarMensagemIA(ultimoResultado.getSugestaoPrompt());
+
+        chat.adicionarMensagemIA("Deseja finalizar o processo, trabalhar com outra UA ou ir para outra etapa da trilha?");
+        chat.adicionarOpcoes(Arrays.stream(UltimoProcesso.values()).map(ultimoProcesso -> new OpcaoChat(ultimoProcesso.getLabel(), new OpcaoUltimoProcesso(ultimoProcesso))).collect(Collectors.toList()));
     }
 
     public void selecionarUnidadeAprendizagem(UnidadeAprendizagem unidadeAprendizagem) {
