@@ -27,7 +27,9 @@ public class DevFlowSimulator {
     private ChatModel virtualProfessorModel;
     private AiService aiService;
     private Scanner scanner;
+    private Curso curso;
     private boolean isAutoMode;
+    private UnidadeAprendizagem uaSelecionada;
 
     public static void main(String[] args) {
         new DevFlowSimulator().run();
@@ -39,8 +41,7 @@ public class DevFlowSimulator {
             setupEnvironment();
             selectMode();
 
-            Curso curso = analyzePdf();
-            if (curso == null) return;
+            curso = analyzePdf();
 
             Selection selection = selectBlockAndUa(curso);
 
@@ -176,7 +177,7 @@ public class DevFlowSimulator {
         System.out.print("> ");
         String uaInput = scanner.nextLine();
         int uaIndex = Integer.parseInt(uaInput.trim());
-        UnidadeAprendizagem uaSelecionada = blocoSelecionado.getUnidadesAprendizagem().get(uaIndex);
+        uaSelecionada = blocoSelecionado.getUnidadesAprendizagem().get(uaIndex);
 
         System.out.println("\n[SELEÇÃO] UA Selecionada: " + uaSelecionada.getTituloUnidadeAprendizagem());
 
@@ -261,7 +262,7 @@ public class DevFlowSimulator {
         while (true) {
             System.out.println("\n--- Iteração " + iteration + " ---");
             String prompt = iteration == 1 ? "Gere o prompt inicial." : "Continue refinando o prompt.";
-            pc3pResult = aiService.gerarPrompt(perfil, sintese, prompt);
+            pc3pResult = aiService.gerarPrompt(perfil, sintese, curso, uaSelecionada.getTituloUnidadeAprendizagem(), prompt);
             printPC3P(pc3pResult);
 
             if (isAutoMode) {
@@ -297,7 +298,7 @@ public class DevFlowSimulator {
                         answers.append(qCount++).append(". ").append(ans).append(" ");
                     }
                     pc3pResult = aiService.gerarPrompt(perfil, sintese,
-                                                       "Aqui estão as respostas para suas perguntas: " + answers.toString());
+                                                       curso, uaSelecionada.getTituloUnidadeAprendizagem(), "Aqui estão as respostas para suas perguntas: " + answers.toString());
                     printPC3P(pc3pResult);
                 }
             }

@@ -24,5 +24,5 @@ public interface AiService {
     ValidacaoRequisicao analisarRequisicao(@V("PERFIL_PEDAGOGICO") PerfilPedagogico perfilPedagogico, @V("NOME_ETAPA") String nomeEtapa, @V("OBJETIVO_ETAPA") String objetivoEtapa, @V("DADOS_CURSO") Curso dadosCurso, @UserMessage String requisicao);
 
     @SystemMessage(fromResource = "prompts/etapa-4-ciclo-pc3p.json")
-    ResultadoRefinamentoPrompt gerarPrompt(@V("PERFIL_PEDAGOGICO") PerfilPedagogico perfilPedagogico, @V("SINTESE_REQUISICAO") SinteseRequisicao sinteseRequisicao, @UserMessage String input);
+    ResultadoRefinamentoPrompt gerarPrompt(@V("PERFIL_PEDAGOGICO") PerfilPedagogico perfilPedagogico, @V("SINTESE_REQUISICAO") SinteseRequisicao sinteseRequisicao, @V("CONTEUDO_CURSO") Curso curso, @V("UNIDADE_APRENDIZAGEM") String unidadeAprendizagem, @UserMessage String input);
 }

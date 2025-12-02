@@ -221,7 +221,7 @@ public class ChatBean implements Serializable {
 
     public void enviarRequisicao() {
         validacaoRequisicao = aiService.analisarRequisicao(perfilPedagogico, faseTrilha.getNome(), faseTrilha.getObjetivo(), curso, requisicao);
-        ultimoResultado = aiService.gerarPrompt(perfilPedagogico, validacaoRequisicao.getSinteseRequisicao(), requisicao);
+        ultimoResultado = aiService.gerarPrompt(perfilPedagogico, validacaoRequisicao.getSinteseRequisicao(), curso, unidadeAprendizagem.getTituloUnidadeAprendizagem(), requisicao);
 
         chat.removerMensagemDigitando();
         chat.adicionarMensagemIA("<strong>Sugestão:</strong> <br/> " + ultimoResultado.getSugestaoPrompt());

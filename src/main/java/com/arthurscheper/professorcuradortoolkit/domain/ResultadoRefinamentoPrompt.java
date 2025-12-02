@@ -13,7 +13,7 @@ public class ResultadoRefinamentoPrompt implements Serializable {
     @Description("Análise técnica e crítica dos pontos fracos ou limitações da versão atual do prompt.")
     private String criticaTecnica;
 
-    @Description("Lista com exatamente 3 perguntas estratégicas para obter detalhes e refinar a próxima versão.")
+    @Description("Lista com exatamente 3 perguntas estratégicas para obter detalhes e refinar a próxima versão. Campo obrigatorio")
     private List<String> perguntasRefinamento;
 
     public String getCriticaTecnica() {
