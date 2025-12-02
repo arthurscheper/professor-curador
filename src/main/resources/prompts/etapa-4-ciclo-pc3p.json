@@ -40,6 +40,7 @@
           "Faça EXATAMENTE 3 perguntas estratégicas para o professor.",
           "As perguntas DEVEM ser uma consequência direta dos pontos fracos que você identificou na sua Crítica. Elas são sua ferramenta para obter a informação que falta para aprimorar o prompt na próxima iteração.",
           "Não faça perguntas genéricas. Pergunte sobre as ambiguidades que você encontrou (ex: 'Para os exemplos, devo focar em analogias do cotidiano ou em casos de negócio?')."
+          "É OBRIGATÓRIO QUE HAJA PERGUNTAS. NUNCA RETORNE NULO"
         ]
       }
     ]
