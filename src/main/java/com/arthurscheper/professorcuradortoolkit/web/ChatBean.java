@@ -106,11 +106,25 @@ public class ChatBean implements Serializable {
             confirmarPerfilPedagogico(((OpcaoConfirmarPerfilPedagogico) opcaoChat.getValor()).isConfirmar());
         } else if (opcaoChat.getValor() instanceof FaseTrilha) {
             selecionarEtapaTrilha((FaseTrilha) opcaoChat.getValor());
+        } else if (opcaoChat.getValor() instanceof ContinuarRefinamento) {
+            continuarRefinamento((ContinuarRefinamento) opcaoChat.getValor());
         }
 
         opcaoChat.setSelecionado(true);
 
         mensagemChat.getOpcoes().forEach(opcao -> opcao.setDesabilitar(true));
+    }
+
+    private void continuarRefinamento(ContinuarRefinamento valor) {
+        if (valor.isContinuar()) {
+            chat.adicionarMensagemIA("Muito bem, vamos continuar com o processo de desenvolvimento da trilha de aprendizagem.");
+            chat.adicionarMensagemIA("Responda as questões de refinamento e coloque suas considerações.");
+            return;
+        }
+
+        alterarEtapaAtual(Etapa.PROMPT_FINALIZADO);
+        chat.adicionarMensagemIA("Aqui está seu prompt finalizado.");
+        chat.adicionarMensagemIA(ultimoResultado.getSugestaoPrompt());
     }
 
     public void selecionarUnidadeAprendizagem(UnidadeAprendizagem unidadeAprendizagem) {
@@ -196,6 +210,9 @@ public class ChatBean implements Serializable {
                 numeroPergunta++;
             }
         }
+
+        chat.adicionarMensagemIA("Deseja continuar com o processo de desenvolvimento da trilha de aprendizagem?");
+        chat.adicionarOpcoes(List.of(new OpcaoChat("Sim", ContinuarRefinamento.SIM), new OpcaoChat("Não", ContinuarRefinamento.NAO)));
     }
 
     public void confirmarPerfilPedagogico(boolean confirmar) {
@@ -213,35 +230,15 @@ public class ChatBean implements Serializable {
     }
 
     public boolean isBloquearMensagemUsuario() {
-        return !Etapa.DEFINIR_PERFIL_PEDAGOGICO.equals(etapaAtual) && !Etapa.REFINAMENTO_PROMPT.equals(etapaAtual);
+        return getUltimaMensagem().getTipo().isBloquearMensagemUsuario();
+    }
+
+    private MensagemChat getUltimaMensagem() {
+        return chat.getMensagens().get(chat.getMensagens().size() - 1);
     }
 
     public boolean isRenderizarAnalisePlanoEnsino() {
         return etapaAtual.equals(Etapa.ANALISAR_PLANO_ENSINO);
-    }
-
-    public boolean isRenderizarBlocos() {
-        return etapaAtual.equals(Etapa.SELECIONAR_BLOCO);
-    }
-
-    public boolean isRenderizarUnidadesAprendizagens() {
-        return etapaAtual.equals(Etapa.SELECIONAR_UNIDADE_APRENDIZAGEM);
-    }
-
-    public boolean isRenderizarUnidadeAprendizagemSelecionada() {
-        return etapaAtual.equals(Etapa.DEFINIR_PERFIL_PEDAGOGICO);
-    }
-
-    public boolean isRenderizarConfirmacaoPerfilPedagogico() {
-        return etapaAtual.equals(Etapa.CONFIRMAR_PERFIL_PEDAGOGICO);
-    }
-
-    public boolean isRenderizarGerarPrompt() {
-        return etapaAtual.equals(Etapa.REFINAMENTO_PROMPT);
-    }
-
-    public boolean isRenderizarEtapaTrilha() {
-        return etapaAtual.equals(Etapa.SELECIONAR_FASE_TRILHA);
     }
 
     public Chat getChat() {
