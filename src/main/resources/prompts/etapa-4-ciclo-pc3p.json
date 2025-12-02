@@ -21,6 +21,7 @@
         "instructions": [
           "Crie o melhor e mais completo prompt possível para outra IA, com o objetivo de gerar os 'entregaveis' definidos na 'sintese_requisicao'.",
           "O prompt DEVE ser escrito na perspectiva do professor (primeira pessoa), como se ele estivesse comandando a IA.",
+          "Se o entregável envolver a criação de videos, o prompt deverá conter o comando 'GERE UM VÍDEO'. Descreva o video utilizando 'visual prompts'. Se houver diálogo, inclua-o no corpo do prompt separadamente.",
           "Incorpore TODAS as diretrizes relevantes do 'perfil_pedagogico' no corpo do prompt (tom de voz, metodologia, restrições, etc.).",
           "Se houver um prompt anterior no histórico, refine-o especificamente com base no último feedback do professor."
         ]
