@@ -147,7 +147,6 @@ public class ChatBean implements Serializable {
             return;
         }
 
-        alterarEtapaAtual(Etapa.PROMPT_FINALIZADO);
         chat.adicionarMensagemIA("Aqui está seu prompt finalizado.");
         chat.adicionarMensagemIA(ultimoResultado.getSugestaoPrompt());
 
@@ -237,10 +236,10 @@ public class ChatBean implements Serializable {
                 chat.adicionarMensagemIA("<strong>Pergunta " + numeroPergunta + ":</strong> <br/> " + pergunta);
                 numeroPergunta++;
             }
-        }
 
-        chat.adicionarMensagemIA("Deseja continuar com o processo de desenvolvimento da trilha de aprendizagem?");
-        chat.adicionarOpcoes(List.of(new OpcaoChat("Sim", ContinuarRefinamento.SIM), new OpcaoChat("Não", ContinuarRefinamento.NAO)));
+            chat.adicionarMensagemIA("Deseja continuar refinando o prompt?");
+            chat.adicionarOpcoes(List.of(new OpcaoChat("Sim", ContinuarRefinamento.SIM), new OpcaoChat("Não", ContinuarRefinamento.NAO)));
+        }
     }
 
     public void confirmarPerfilPedagogico(boolean confirmar) {
